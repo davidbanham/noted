@@ -5,6 +5,7 @@ window.srp = ->
   text = text.replace /\[\[/g, "<a contenteditable=\"false\" href=\"#{target}\">"
   text = text.replace /\]\]/g, '</a>'
   elem.innerHTML = text
+  save()
 
 window.onload = ->
   fetch 'Directory'

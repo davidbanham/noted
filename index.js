@@ -9,7 +9,8 @@
     target = findOne(text);
     text = text.replace(/\[\[/g, "<a contenteditable=\"false\" href=\"" + target + "\">");
     text = text.replace(/\]\]/g, '</a>');
-    return elem.innerHTML = text;
+    elem.innerHTML = text;
+    return save();
   };
 
   window.onload = function() {
