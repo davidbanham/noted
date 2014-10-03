@@ -1,0 +1,10 @@
+doctype html
+head
+  title Bobcat
+  script(type='text/javascript', src='index.js')
+
+body
+  button(onclick="save()") Save
+  button(onclick="load()") Load
+  p#title(contenteditable=true) Directory
+  p#content(contenteditable=true, onblur="srp()")
