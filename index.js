@@ -15,7 +15,7 @@
   window.onload = function() {
     fetch('Directory');
     return document.getElementById('content').onclick = function(e) {
-      if (e.target.pathname) {
+      if (e.target.pathname && e.target.innerText.substr(0, 4) !== 'http') {
         e.preventDefault();
         return fetch(e.target.pathname.substring(1));
       }

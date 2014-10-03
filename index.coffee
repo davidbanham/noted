@@ -9,7 +9,7 @@ window.srp = ->
 window.onload = ->
   fetch 'Directory'
   document.getElementById('content').onclick = (e) ->
-    if e.target.pathname
+    if e.target.pathname and e.target.innerText.substr(0, 4) isnt 'http'
       e.preventDefault()
       fetch e.target.pathname.substring 1
 
