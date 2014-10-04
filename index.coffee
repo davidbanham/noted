@@ -1,9 +1,7 @@
 window.srp = ->
   elem = document.getElementById 'content'
   text = elem.innerHTML
-  target = findOne text
-  text = text.replace /\[\[/g, "<a contenteditable=\"false\" href=\"#{target}\">"
-  text = text.replace /\]\]/g, '</a>'
+  text = replace text
   elem.innerHTML = text
   save()
 
@@ -42,4 +40,13 @@ put = (name, content) ->
   req.send(content)
 
 findOne = (text) ->
-  text.substring (text.indexOf('[[') + 2), text.indexOf(']]')
+  from = text.indexOf '[['
+  return null if from is -1
+  text.substring (from + 2), text.indexOf(']]')
+
+replace = (text) ->
+  target = findOne text
+  return text if !target
+  text = text.replace /\[\[/, "<a contenteditable=\"false\" href=\"#{target}\">"
+  text = text.replace /\]\]/, '</a>'
+  replace text
