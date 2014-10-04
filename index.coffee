@@ -39,9 +39,18 @@ get = (name, cb) ->
 
 put = (name, content) ->
   req = new XMLHttpRequest()
+  req.onload = ->
+    error true if req.status isnt 200
+    error false if req.status is 200
+  req.onerror = ->
+    error true
   req.open 'PUT', 'api/' + name, true
   req.setRequestHeader 'Content-Type', 'text/html'
   req.send(content)
+
+error = (state) ->
+  return document.body.style.background = 'red' if state
+  document.body.style.background = null
 
 findOne = (text) ->
   from = text.indexOf '[['
