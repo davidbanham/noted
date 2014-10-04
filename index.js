@@ -12,7 +12,7 @@
   };
 
   window.onload = function() {
-    fetch('Directory');
+    fetch(window.location.pathname.substring('1') || 'Directory');
     return document.getElementById('content').onclick = function(e) {
       if (e.target.pathname && e.target.innerText.substr(0, 4) !== 'http') {
         e.preventDefault();
@@ -24,8 +24,15 @@
   fetch = function(name) {
     return get(name, function(res) {
       document.getElementById('content').innerHTML = res;
-      return document.getElementById('title').innerText = name;
+      document.getElementById('title').innerText = name;
+      return history.pushState({
+        name: name
+      }, name, "/" + name);
     });
+  };
+
+  window.onpopstate = function(e) {
+    return fetch(e.state.name);
   };
 
   window.load = function() {
@@ -47,14 +54,14 @@
     req.onload = function() {
       return cb(this.responseText);
     };
-    req.open('GET', name, true);
+    req.open('GET', 'api/' + name, true);
     return req.send();
   };
 
   put = function(name, content) {
     var req;
     req = new XMLHttpRequest();
-    req.open('PUT', name, true);
+    req.open('PUT', 'api/' + name, true);
     req.setRequestHeader('Content-Type', 'text/html');
     return req.send(content);
   };

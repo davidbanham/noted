@@ -8,7 +8,9 @@ handler = (req, res) ->
     return res.end()
   if req.url is '/' then return serveIndex 'html', req, res
   if req.url is '/index.js' then return serveIndex 'js', req, res
+  if req.url.split('/')[1] isnt 'api' then return serveIndex 'html', req, res
   req.url.replace /\./g, ''
+  req.url.replace /api\//, ''
   if req.method is 'PUT' then return savePage req, res
   if req.method is 'GET' then return servePage req, res
 

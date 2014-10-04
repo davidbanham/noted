@@ -6,7 +6,7 @@ window.srp = ->
   save()
 
 window.onload = ->
-  fetch 'Directory'
+  fetch window.location.pathname.substring('1') or 'Directory'
   document.getElementById('content').onclick = (e) ->
     if e.target.pathname and e.target.innerText.substr(0, 4) isnt 'http'
       e.preventDefault()
@@ -16,6 +16,10 @@ fetch = (name) ->
   get name, (res) ->
     document.getElementById('content').innerHTML = res
     document.getElementById('title').innerText = name
+    history.pushState({name: name}, name, "/#{name}")
+
+window.onpopstate = (e) ->
+  fetch e.state.name
 
 window.load = ->
   name = document.getElementById('title').innerText
@@ -30,12 +34,12 @@ get = (name, cb) ->
   req = new XMLHttpRequest()
   req.onload = ->
     cb @responseText
-  req.open 'GET', name, true
+  req.open 'GET', 'api/' + name, true
   req.send()
 
 put = (name, content) ->
   req = new XMLHttpRequest()
-  req.open 'PUT', name, true
+  req.open 'PUT', 'api/' + name, true
   req.setRequestHeader 'Content-Type', 'text/html'
   req.send(content)
 
