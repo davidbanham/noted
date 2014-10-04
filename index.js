@@ -86,4 +86,10 @@
     return replace(text);
   };
 
+  document.addEventListener('keydown', function(e) {
+    if (e.which === 27) {
+      return e.target.blur();
+    }
+  });
+
 }).call(this);

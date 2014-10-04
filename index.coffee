@@ -54,3 +54,7 @@ replace = (text) ->
   text = text.replace /\[\[/, "<a contenteditable=\"false\" href=\"#{target}\">"
   text = text.replace /\]\]/, '</a>'
   replace text
+
+document.addEventListener 'keydown', (e) ->
+  if e.which is 27 #esc
+    e.target.blur()
