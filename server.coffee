@@ -2,7 +2,22 @@ http = require 'http'
 fs = require 'fs'
 path = require 'path'
 
+parseCookies = (request) ->
+  list = {}
+  rc = request.headers.cookie
+  rc and rc.split(";").forEach((cookie) ->
+    parts = cookie.split("=")
+    list[parts.shift().trim()] = unescape(parts.join("="))
+    return
+  )
+  list
+
+auth = (cookie) ->
+  return true if !process.env.BOBCATPASS
+  return true if cookie.bobcatpass is process.env.BOBCATPASS
+
 handler = (req, res) ->
+  return serveLogin req, res unless auth parseCookies req
   if ['favicon.ico'].indexOf(path.basename(req.url)) > -1
     res.writeHead 404
     return res.end()
@@ -16,6 +31,10 @@ handler = (req, res) ->
 
 serveIndex = (ext, req, res) ->
   fs.createReadStream("./index.#{ext}").pipe(res)
+
+serveLogin = (req, res) ->
+  res.writeHead 403
+  fs.createReadStream("./login.html").pipe(res)
 
 servePage = (req, res) ->
   reader = fs.createReadStream('notes/' + path.basename(req.url))

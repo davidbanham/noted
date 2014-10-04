@@ -1,0 +1,11 @@
+doctype html
+head
+  title Login to Bobcat
+  script.
+    setCookie = function() {
+      document.cookie = 'bobcatpass='+document.getElementById('password').value+'; max-age='+10 * 365 * 24 * 60 * 60+'; path=/';
+      location.reload();
+      }
+body
+  label Password
+  input#password(type='password', onblur="setCookie()")
