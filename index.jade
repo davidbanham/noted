@@ -4,7 +4,5 @@ head
   script(type='text/javascript', src='index.js')
 
 body
-  button(onclick="save()") Save
-  button(onclick="load()") Load
-  p#title(contenteditable=true) Directory
+  h2#title(contenteditable=true, onblur="load()") Directory
   p#content(contenteditable=true, onblur="srp()")
