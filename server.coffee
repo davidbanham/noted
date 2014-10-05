@@ -15,8 +15,8 @@ parseCookies = (request) ->
   list
 
 auth = (cookie) ->
-  return true if !process.env.BOBCATPASS
-  return true if cookie.bobcatpass is process.env.BOBCATPASS
+  return true if !process.env.NOTEDPASS
+  return true if cookie.notedpass is process.env.NOTEDPASS
 
 handler = (req, res) ->
   return serveLogin req, res unless auth parseCookies req

@@ -23,10 +23,10 @@
   };
 
   auth = function(cookie) {
-    if (!process.env.BOBCATPASS) {
+    if (!process.env.NOTEDPASS) {
       return true;
     }
-    if (cookie.bobcatpass === process.env.BOBCATPASS) {
+    if (cookie.notedpass === process.env.NOTEDPASS) {
       return true;
     }
   };

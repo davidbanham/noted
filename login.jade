@@ -1,9 +1,9 @@
 doctype html
 head
-  title Login to Bobcat
+  title Login to Noted
   script.
     setCookie = function() {
-      document.cookie = 'bobcatpass='+document.getElementById('password').value+'; max-age='+10 * 365 * 24 * 60 * 60+'; path=/';
+      document.cookie = 'notedpass='+document.getElementById('password').value+'; max-age='+10 * 365 * 24 * 60 * 60+'; path=/';
       location.reload();
       }
 body
