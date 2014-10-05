@@ -2,6 +2,8 @@ http = require 'http'
 fs = require 'fs'
 path = require 'path'
 
+noteDir = (process.env.NOTEDIR or 'notes') + '/'
+
 parseCookies = (request) ->
   list = {}
   rc = request.headers.cookie
@@ -37,13 +39,13 @@ serveLogin = (req, res) ->
   fs.createReadStream("./login.html").pipe(res)
 
 servePage = (req, res) ->
-  reader = fs.createReadStream('notes/' + path.basename(req.url))
+  reader = fs.createReadStream(noteDir + path.basename(req.url))
   reader.on 'error', (err) ->
     res.end ""
   reader.pipe(res)
 
 savePage = (req, res) ->
-  req.pipe(fs.createWriteStream('notes/' + path.basename(req.url))).on 'close', ->
+  req.pipe(fs.createWriteStream(noteDir + path.basename(req.url))).on 'close', ->
     res.end()
 
 http.createServer(handler).listen(process.env.PORT or 3000)
