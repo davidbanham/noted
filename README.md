@@ -31,3 +31,7 @@ The server looks for three environment variables, all optional.
 If a password is set, all requests will be served with a login page. Enter the password and blur the input element, you'll be redirected.
 
 There are no dependencies, there are no libraries. Have fun!
+
+### Notes (heh)
+
+Noted is intended as single player only. More than one person can use it, but if you both try and update a note at the same time you'll overwrite each other.
