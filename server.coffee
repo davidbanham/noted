@@ -1,6 +1,7 @@
 http = require 'http'
 fs = require 'fs'
 path = require 'path'
+url = require 'url'
 
 noteDir = (process.env.NOTEDIR or 'notes') + '/'
 
@@ -19,12 +20,14 @@ auth = (cookie) ->
   return true if cookie.notedpass is process.env.NOTEDPASS
 
 handler = (req, res) ->
+  req.parsed = url.parse req.url, true
   return serveLogin req, res unless auth parseCookies req
   if ['favicon.ico'].indexOf(path.basename(req.url)) > -1
     res.writeHead 404
     return res.end()
   if req.url is '/' then return serveIndex 'html', req, res
   if req.url is '/index.js' then return serveIndex 'js', req, res
+  if req.parsed.pathname is '/search' then return searchAll req, res
   if req.url.split('/')[1] isnt 'api' then return serveIndex 'html', req, res
   req.url.replace /\./g, ''
   req.url.replace /api\//, ''
@@ -47,5 +50,23 @@ servePage = (req, res) ->
 savePage = (req, res) ->
   req.pipe(fs.createWriteStream(noteDir + path.basename(req.url))).on 'close', ->
     res.end()
+
+searchAll = (req, res) ->
+  fs.readdir noteDir, (err, files) ->
+    matches = files.filter search req.parsed.query.s
+    res.writeHead 404 if matches.length < 1
+    res.end JSON.stringify matches if req.headers.accept.match 'application/json'
+    fs.readFile 'search.html', (err, content) ->
+      return res.end content if matches.length < 1
+      res.end content.toString().replace 'no matches', matches.map(templater "<a href=foobar>foobar</a>").join '</p><p>'
+
+search = (term) ->
+  return (file) ->
+    return true if fs.readFileSync(path.join(noteDir, file)).toString().match(term)
+    return false
+
+templater = (template) ->
+  return (insert) ->
+    template.replace /foobar/g, insert
 
 http.createServer(handler).listen(process.env.PORT or 3000)
