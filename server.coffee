@@ -4,6 +4,7 @@ path = require 'path'
 url = require 'url'
 
 noteDir = (process.env.NOTEDIR or 'notes') + '/'
+archiveDir = (process.env.ARCHIVEDIR or 'archive') + '/'
 
 parseCookies = (request) ->
   list = {}
@@ -48,8 +49,12 @@ servePage = (req, res) ->
   reader.pipe(res)
 
 savePage = (req, res) ->
-  req.pipe(fs.createWriteStream(noteDir + path.basename(req.url))).on 'close', ->
-    res.end()
+  fileName = path.basename(req.url).toLowerCase()
+  stamp = new Date().toISOString()
+  fs.mkdir archiveDir + fileName, (err) ->
+    fs.createReadStream(noteDir + fileName).pipe(fs.createWriteStream(path.join(archiveDir + fileName + '/' + stamp))).on 'close', ->
+      req.pipe(fs.createWriteStream(noteDir + fileName)).on 'close', ->
+        res.end()
 
 searchAll = (req, res) ->
   fs.readdir noteDir, (err, files) ->
