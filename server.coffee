@@ -52,6 +52,7 @@ savePage = (req, res) ->
   fileName = path.basename(req.url).toLowerCase()
   stamp = new Date().toISOString()
   fs.mkdir archiveDir + fileName, (err) ->
+    res.writeHead 500 if err
     fs.createReadStream(noteDir + fileName).pipe(fs.createWriteStream(path.join(archiveDir + fileName + '/' + stamp))).on 'close', ->
       req.pipe(fs.createWriteStream(noteDir + fileName)).on 'close', ->
         res.end()
