@@ -6,6 +6,8 @@ url = require 'url'
 noteDir = (process.env.NOTEDIR or 'notes') + '/'
 archiveDir = (process.env.ARCHIVEDIR or 'archive') + '/'
 
+console.log 'archiveDir is', archiveDir
+
 parseCookies = (request) ->
   list = {}
   rc = request.headers.cookie
