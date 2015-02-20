@@ -8,25 +8,25 @@ window.srp = ->
 window.onload = ->
   fetch window.location.pathname.substring('1') or 'Directory'
   document.getElementById('content').onclick = (e) ->
-    if e.target.pathname and e.target.innerText.substr(0, 4) isnt 'http'
+    if e.target.pathname and e.target.textContent.substr(0, 4) isnt 'http'
       e.preventDefault()
       fetch e.target.pathname.substring 1
 
 fetch = (name) ->
   get name, (res) ->
-    document.getElementById('content').innerHTML = res
-    document.getElementById('title').innerText = name
+    document.getElementById('content').innerHTML = res || '_'
+    document.getElementById('title').textContent = name
     history.pushState({name: name}, name, "/#{name}")
 
 window.onpopstate = (e) ->
   fetch e.state.name
 
 window.load = ->
-  name = document.getElementById('title').innerText
+  name = document.getElementById('title').textContent
   fetch name
 
 window.save = ->
-  name = document.getElementById('title').innerText
+  name = document.getElementById('title').textContent
   content = document.getElementById('content').innerHTML
   put name, content
 

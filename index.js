@@ -14,7 +14,7 @@
   window.onload = function() {
     fetch(window.location.pathname.substring('1') || 'Directory');
     return document.getElementById('content').onclick = function(e) {
-      if (e.target.pathname && e.target.innerText.substr(0, 4) !== 'http') {
+      if (e.target.pathname && e.target.textContent.substr(0, 4) !== 'http') {
         e.preventDefault();
         return fetch(e.target.pathname.substring(1));
       }
@@ -23,8 +23,8 @@
 
   fetch = function(name) {
     return get(name, function(res) {
-      document.getElementById('content').innerHTML = res;
-      document.getElementById('title').innerText = name;
+      document.getElementById('content').innerHTML = res || '_';
+      document.getElementById('title').textContent = name;
       return history.pushState({
         name: name
       }, name, "/" + name);
@@ -37,13 +37,13 @@
 
   window.load = function() {
     var name;
-    name = document.getElementById('title').innerText;
+    name = document.getElementById('title').textContent;
     return fetch(name);
   };
 
   window.save = function() {
     var content, name;
-    name = document.getElementById('title').innerText;
+    name = document.getElementById('title').textContent;
     content = document.getElementById('content').innerHTML;
     return put(name, content);
   };
